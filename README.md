@@ -21,7 +21,7 @@ Prototyping what legal YAML might look like
 
 The base document would define common sections and the variables for each.
 
-```text
+````mkdn
 ---
 label: Non-Disclosure Agreement
 shorthand: NDA # optional
@@ -41,20 +41,20 @@ abstract: >
     That is all.
 ---
 
----
+```yaml
 label: Parties and Purpose
 type: nda:parties-and-purpose
 variant: 2025-q3
 revision: 1
 id: nda:parties-and-purpose:delaware-c-corp-2025-q3:1
 uses:
-  - field: issuer:company_name
-  - field: recipient:name
-    options:
-        - recipient:full_name
-        - recipient:company_name
-  - field: effective_date
----
+    - field: issuer:company_name
+    - field: recipient:name
+      options:
+          - recipient:full_name
+          - recipient:company_name
+    - field: effective_date
+```
 
 This Non-Disclosure Agreement ('Agreement') is entered into on [Effective Date]
 by and between [Issuer: Company Name] (the Disclosing Party) and [Recipient: Name]
@@ -64,11 +64,11 @@ The Parties wish to explore a potential business relationship, during which the
 Disclosing Party may disclose certain Confidential Information to the Receiving
 Party solely for the Purpose of mutual benefit.
 
----
+```yaml
 label: Confidential Information
 group: nda:terms
 option: nda:normal_terms:delaware-c-corp-2025-q3:1
----
+```
 
 Confidential Information means any non-public information disclosed by the
 Disclosing Party to the Receiving Party, whether orally, in writing, or by
@@ -79,18 +79,18 @@ This includes, but is not limited to, business plans, technical data, source
 code, customer lists, financial information, trade secrets, and know-how.
 
 Confidential Information does **not** include information that:
-  (a) is or becomes publicly known through no fault of the Receiving Party;
-  (b) was already known to the Receiving Party prior to disclosure;
-  (c) is independently developed by the Receiving Party without use of or reference to
-      the Disclosing Party's Confidential Information;
-  (d) is lawfully received from a third party without restriction; or
-  (e) must be disclosed by law (provided the Receiving Party gives prompt notice to the
-      Disclosing Party to allow it to seek protective measures).
+(a) is or becomes publicly known through no fault of the Receiving Party;
+(b) was already known to the Receiving Party prior to disclosure;
+(c) is independently developed by the Receiving Party without use of or reference to
+the Disclosing Party's Confidential Information;
+(d) is lawfully received from a third party without restriction; or
+(e) must be disclosed by law (provided the Receiving Party gives prompt notice to the
+Disclosing Party to allow it to seek protective measures).
 
----
+```yaml
 group: nda:terms
 option: nda:strict_terms:delaware-c-corp-2025-q3:1
----
+```
 
 Confidential Informations means any non-public information, no matter the
 source through which it was obtained.
@@ -98,60 +98,60 @@ source through which it was obtained.
 Confidential Information does **not** include information publicly published
 by the disclosing party, nor listed in appendix under exclusions.
 
----
+```yaml
 label: CA Disclaimer
 revision: 3
 optional: true
 required_by:
-  - california
+    - california
 tags:
-  - california
-  - cancer
+    - california
+    - cancer
 id: nda:california_terms
 uses:
-  - field: recipient:initials
----
+    - field: recipient:initials
+```
 
 P95 Warning: It is known to the state of California that any actian, legal or
 otherwise, may cause birth defects or cancer.
 
 Initial: [Recipient: Initials]
 
----
+```yaml
 label: Signature
 id: nda:signature
 uses:
-  - field: recipient:signature_name
-  - field: recipient:signature_date
-  - field: issuer:signature_name
-  - field: issuer:signature_text
-  - field: issuer:signature_date
----
+    - field: recipient:signature_name
+    - field: recipient:signature_date
+    - field: issuer:signature_name
+    - field: issuer:signature_text
+    - field: issuer:signature_date
+```
 
 Hereby signed by Disclosing Party:
-       Name: [Issuer: Signature Text]
-       Date: [Issuer: Signature Text]
-  Signature: [Issuer: Signature Text]
+Name: [Issuer: Signature Text]
+Date: [Issuer: Signature Text]
+Signature: [Issuer: Signature Text]
 
 Hereby signed by Receiving Party:
-       Name: [Recipient: Signature Text]
-       Date: [Recipient: Signature Text]
-  Signature: [Recipient: Signature Text]
+Name: [Recipient: Signature Text]
+Date: [Recipient: Signature Text]
+Signature: [Recipient: Signature Text]
 
----
+```yaml
 label: Appendix
 type: nda:appendix
 uses:
-  - field: exclusions
-    multiple: true
-    minimum: 0
----
+    - field: exclusions
+      multiple: true
+      minimum: 0
+```
 
 Items explicitly listed as excluded from the document:
 {foreach exclusion of exclusions}
-  {index}. {exclusion}
+{index}. {exclusion}
 {- end}
-```
+````
 
 Since the document histories might be more tree-like than linear, I'm proposing that instead of semver we use a strategy like this:
 
@@ -165,7 +165,7 @@ Since the document histories might be more tree-like than linear, I'm proposing 
 
 The templated document would have fewer options than the base document and pre-fill some data.
 
-```text
+````mkdn
 ---
 from: nda:delaware-c-corp-2025-q3:1
 label: Non-Disclosure Agreement
@@ -173,22 +173,22 @@ type: nda
 variant_label: ACME, Inc v2
 ---
 
----
+```yaml
 label: Parties and Purpose
 replaces: nda:parties-and-purpose:delaware-c-corp-2025-q3
 variant: acme-inc-2026-q1
 id: nda:acme-inc-2026-q1
 # tells the checker not to complain that a variable was not provided
 provides:
-  - field: issuer:company_name
----
+    - field: issuer:company_name
+```
 
 This is a Non-Disclosure Agreement between [ACME, Inc (issuer:company_name)] (Disclosing Party) and
 [Recipient: Name] beginning [Effective Date].
 
----
+```yaml
 from: nda:strict_terms:delaware-c-corp-2025-q3:1
----
+```
 
 Confidential Informations means any non-public information, no matter the
 source through which it was obtained.
@@ -196,20 +196,20 @@ source through which it was obtained.
 Confidential Information does **not** include information publicly published
 by the disclosing party, nor listed in appendix under exclusions.
 
----
+```yaml
 from: nda:signature
----
+```
 
 Hereby signed by Disclosing Party:
-       Name: [Issuer: Signature Text]
-       Date: [Issuer: Signature Text]
-  Signature: [Issuer: Signature Text]
+Name: [Issuer: Signature Text]
+Date: [Issuer: Signature Text]
+Signature: [Issuer: Signature Text]
 
 Hereby signed by Receiving Party:
-       Name: [Recipient: Signature Text]
-       Date: [Recipient: Signature Text]
-  Signature: [Recipient: Signature Text]
-```
+Name: [Recipient: Signature Text]
+Date: [Recipient: Signature Text]
+Signature: [Recipient: Signature Text]
+````
 
 ## Practical Problems
 

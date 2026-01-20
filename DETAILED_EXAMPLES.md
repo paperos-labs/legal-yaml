@@ -56,10 +56,14 @@ recipient_signature_date: "[RECIPIENT SIGNATURE DATE]"
 
 # Conditional flags
 use_strict_terms: false
+use_standard_terms: true
 include_california_warning: false
-exclusions:
-  - "[EXCLUSION 1]"
-  - "[EXCLUSION 2]"
+signatures_with_california: false
+signatures_without_california: true
+
+# Exclusions
+exclusion_1: "1. [EXCLUSION 1]"
+exclusion_2: "2. [EXCLUSION 2]"
 ---
 
 # Non-Disclosure Agreement
@@ -76,7 +80,7 @@ Party solely for the Purpose of mutual benefit.
 
 ## 2. Confidential Information
 
-@if(use_strict_terms)
+[{{use_strict_terms}}
 
 ### 2.1 Strict Definition
 
@@ -86,7 +90,9 @@ source through which it was obtained.
 Confidential Information does **not** include information publicly published
 by the disclosing party, nor listed in appendix under exclusions.
 
-@else
+]
+
+[{{use_standard_terms}}
 
 ### 2.1 Standard Definition
 
@@ -108,9 +114,9 @@ Confidential Information does **not** include information that:
 - (e) must be disclosed by law (provided the Receiving Party gives prompt notice to the
   Disclosing Party to allow it to seek protective measures).
 
-@endif
+]
 
-@if(include_california_warning)
+[{{include_california_warning}}
 
 ## 3. California Disclaimer
 
@@ -119,13 +125,9 @@ otherwise, may cause birth defects or cancer.
 
 Initial: {{recipient_initials}}
 
-@endif
+]
 
-@if(include_california_warning)
-## 4. Signatures
-@else
-## 3. Signatures
-@endif
+## [{{signatures_with_california}}4][{{signatures_without_california}}3]. Signatures
 
 Hereby signed by Disclosing Party:
 - Name: {{issuer_signature_name}}
@@ -141,24 +143,24 @@ Hereby signed by Receiving Party:
 
 Items explicitly listed as excluded from the document:
 
-@foreach(exclusions as index => exclusion)
-{{index + 1}}. {{exclusion}}
-@endforeach
+{{exclusion_1}}
+{{exclusion_2}}
 
 ````
 
 **Key Features Demonstrated**:
 - ✅ YAML frontmatter with document metadata
 - ✅ Field definitions in frontmatter
-- ✅ Conditional sections with `@if`/`@else`/`@endif`
+- ✅ Optional clauses with `[{{condition}}text]` syntax
 - ✅ Variable interpolation with `{{variable}}`
-- ✅ Foreach loops with `@foreach`
 - ✅ Multiple sections with legal content
 - ✅ Complete document structure
 
 **Comparison to Legal-YAML**:
-- Similar: YAML frontmatter, markdown prose, conditionals, loops
-- Different: No embedded YAML blocks per section, preprocessor directives instead
+- Similar: YAML frontmatter, markdown prose, optional sections
+- Different: No embedded YAML blocks per section; uses square brackets for optional clauses instead of YAML blocks
+
+**Note on Syntax**: Legal Markdown uses square brackets with mixins for optional clauses (`[{{mixin_name}}text]`), not `@if/@else/@endif`. Loops are not directly supported in the template syntax—lists must be defined as separate fields in YAML.
 
 ---
 
@@ -184,42 +186,13 @@ Party solely for the Purpose of mutual benefit.
 {{#clause confidentialityTerms}}
 ## Confidential Information
 
-{{#if useStrictTerms}}
-Confidential Information means any non-public information, no matter the
-source through which it was obtained.
+{{confidentialityDefinition}}
 
-Confidential Information does **not** include information publicly published
-by the disclosing party, nor listed in appendix under exclusions.
-{{else}}
-Confidential Information means any non-public information disclosed by the
-Disclosing Party to the Receiving Party, whether orally, in writing, or by
-inspection, that is designated as confidential or that reasonably should be
-understood to be confidential given the nature of the information and the
-circumstances of disclosure.
-
-This includes, but is not limited to, business plans, technical data, source
-code, customer lists, financial information, trade secrets, and know-how.
-
-Confidential Information does **not** include information that:
-(a) is or becomes publicly known through no fault of the Receiving Party;
-(b) was already known to the Receiving Party prior to disclosure;
-(c) is independently developed by the Receiving Party without use of or reference to
-the Disclosing Party's Confidential Information;
-(d) is lawfully received from a third party without restriction; or
-(e) must be disclosed by law (provided the Receiving Party gives prompt notice to the
-Disclosing Party to allow it to seek protective measures).
-{{/if}}
+{{confidentialityExclusions}}
 {{/clause}}
 
 {{#clause californiaDisclaimer}}
-{{#if includeCaliforniaWarning}}
-## California Disclaimer
-
-**P95 Warning**: It is known to the state of California that any action, legal or
-otherwise, may cause birth defects or cancer.
-
-Initial: {{recipientInitials}}
-{{/if}}
+{{californiaWarningText}}
 {{/clause}}
 
 {{#clause signatures}}
@@ -241,9 +214,7 @@ Hereby signed by Receiving Party:
 
 Items explicitly listed as excluded from the document:
 
-{{#ulist exclusions}}
-{{index}}. {{item}}
-{{/ulist}}
+{{exclusionsList}}
 {{/clause}}
 ````
 
@@ -311,16 +282,16 @@ transaction ReceiptAcknowledged {
 
 **Key Features Demonstrated**:
 - ✅ Variable interpolation with `{{variable}}`
-- ✅ Conditional blocks with `{{#if}}`/`{{else}}`/`{{/if}}`
 - ✅ Clause blocks with `{{#clause}}`
-- ✅ List iteration with `{{#ulist}}`
 - ✅ Separate schema definition (Concerto model)
 - ✅ Type system with optional fields
 - ✅ Complete document structure
 
 **Comparison to Legal-YAML**:
-- Similar: Markdown prose, conditionals, variable interpolation, modular clauses
+- Similar: Markdown prose, variable interpolation, modular clauses
 - Different: Mustache-like syntax, separate schema files, blockchain-ready
+
+**Important Note on Conditionals**: CiceroMark does NOT support `{{#if}}` conditionals in the template markup itself. Conditional logic must be handled in the Ergo logic layer, which then populates different variable values. The template variables (like `{{confidentialityDefinition}}`) would contain the appropriate text based on conditions evaluated in Ergo code.
 
 ---
 
@@ -626,7 +597,7 @@ Party solely for the Purpose of mutual benefit.
 
 ## 2. Confidential Information
 
-{{#if [[Use Strict Terms]] = "true"}}
+{{#if [[Use Strict Terms]]}}
 
 **Strict Definition**
 
@@ -665,7 +636,7 @@ Confidential Information does **not** include information that:
 
 {{/if}}
 
-{{#if [[Jurisdiction]] = "California"}}
+{{#if (equals [[Jurisdiction]] "California")}}
 ## 3. California Disclaimer
 
 **P95 Warning**: It is known to the state of California that any action, legal or
@@ -674,7 +645,7 @@ otherwise, may cause birth defects or cancer.
 Initial: [[Recipient Initials]]
 {{/if}}
 
-## {{#if [[Jurisdiction]] = "California"}}4{{else}}3{{/if}}. Signatures
+## {{#if (equals [[Jurisdiction]] "California")}}4{{else}}3{{/if}}. Signatures
 
 Hereby signed by Disclosing Party:
 - Name: [[Issuer Signature Name]]

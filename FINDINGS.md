@@ -8,6 +8,7 @@ I've completed comprehensive research on existing legal document template soluti
 
 1. **[RESEARCH_SUMMARY.md](RESEARCH_SUMMARY.md)** - Quick visual comparison with side-by-side examples
 2. **[EXISTING_SOLUTIONS.md](EXISTING_SOLUTIONS.md)** - Detailed analysis with scoring and recommendations
+3. **[DETAILED_EXAMPLES.md](DETAILED_EXAMPLES.md)** - Complete NDA examples in each comparable syntax
 
 ### Key Finding: Most Similar Solution
 

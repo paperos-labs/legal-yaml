@@ -3,8 +3,7 @@
 Prototyping what legal YAML might look like
 
 For a comparison with existing legal document template solutions, see:
-- [RESEARCH_SUMMARY.md](RESEARCH_SUMMARY.md) - Quick visual comparison
-- [EXISTING_SOLUTIONS.md](EXISTING_SOLUTIONS.md) - Detailed analysis
+- [SOLUTIONS_RESEARCH.md](SOLUTIONS_RESEARCH.md) - Research summary and context
 - [DETAILED_EXAMPLES.md](DETAILED_EXAMPLES.md) - Complete NDA examples in each syntax
 
 ## Key features

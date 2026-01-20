@@ -2,6 +2,8 @@
 
 Prototyping what legal YAML might look like
 
+For a comparison with existing legal document template solutions, see [EXISTING_SOLUTIONS.md](EXISTING_SOLUTIONS.md).
+
 ## Key features
 
 - YAML as LLM output

@@ -121,7 +121,11 @@ Initial: {{recipient_initials}}
 
 @endif
 
-## {{if include_california_warning}}4{{else}}3{{endif}}. Signatures
+@if(include_california_warning)
+## 4. Signatures
+@else
+## 3. Signatures
+@endif
 
 Hereby signed by Disclosing Party:
 - Name: {{issuer_signature_name}}

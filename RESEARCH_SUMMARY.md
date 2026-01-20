@@ -27,14 +27,14 @@ tags:
     - formation
 ---
 
-\```yaml
+```yaml
 label: Parties and Purpose
 type: nda:parties-and-purpose
 uses:
     - field: issuer:company_name
     - field: recipient:name
     - field: effective_date
-\```
+```
 
 This Non-Disclosure Agreement ('Agreement') is entered into on [Effective Date]
 by and between [Issuer: Company Name] (the Disclosing Party) and [Recipient: Name]
@@ -250,5 +250,4 @@ See [EXISTING_SOLUTIONS.md](EXISTING_SOLUTIONS.md) for detailed comparisons, exa
 
 ---
 
-*Research completed: January 2026*  
-*Issue: [Existing Solutions](https://github.com/paperos-labs/legal-yaml/issues)*
+*Research completed: January 2026*

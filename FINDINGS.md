@@ -69,12 +69,12 @@ label: Non-Disclosure Agreement
 type: nda
 ---
 
-\```yaml
+```yaml
 label: Parties and Purpose
 uses:
     - field: issuer:company_name
     - field: recipient:name
-\```
+```
 
 This NDA is between [Issuer: Company Name] and [Recipient: Name].
 ```
@@ -194,6 +194,4 @@ This research shows that legal-yaml is building on proven approaches while addin
 
 ---
 
-*Research Date: January 20, 2026*  
-*Issue: Existing Solutions*  
-*Researcher: GitHub Copilot*
+*Research Date: January 20, 2026*

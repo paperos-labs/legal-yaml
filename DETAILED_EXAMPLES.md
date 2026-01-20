@@ -170,11 +170,16 @@ Items explicitly listed as excluded from the document:
 ## 2. Accord Project Cicero - NDA Example
 
 **Repository**: https://github.com/accordproject/cicero  
-**Documentation Source**: https://docs.accordproject.org/docs/markup-cicero.html
+**Template Library**: https://github.com/accordproject/cicero-template-library  
+**Concerto Language**: https://github.com/accordproject/concerto  
+**Template Examples**: https://templates.accordproject.org  
+**Real Example**: See [acceptance-of-delivery template](https://github.com/accordproject/cicero-template-library/tree/main/src/acceptance-of-delivery)
 
 This example shows a comparable NDA using Cicero's CiceroMark syntax with accompanying Concerto model.
 
-**Important Note on Conditionals**: CiceroMark does NOT support `{{#if}}` conditional blocks in the template markup itself. Earlier versions of this document incorrectly showed such conditionals. In CiceroMark, conditional logic must be handled in the Ergo logic layer, which then populates different variable values. The template variables contain the appropriate text based on conditions evaluated in Ergo code.
+**Important Note on Conditionals**: CiceroMark does NOT support `{{#if}}` conditional blocks in the template markup itself. Earlier versions of this document incorrectly showed such conditionals. In CiceroMark, conditional logic must be handled in the Ergo logic layer, which then populates different variable values. The template uses simple variable placeholders.
+
+**Real-World Example**: The actual Cicero templates use straightforward variable substitution. For instance, the `acceptance-of-delivery` template uses `{{shipper}}`, `{{receiver}}`, `{{deliverable}}`, `{{businessDays}}`, and `{{attachment}}` without any conditional logic in the template itself.
 
 ### Template File (grammar.tem.md)
 
@@ -225,6 +230,8 @@ Items explicitly listed as excluded from the document:
 ````
 
 ### Model File (model.cto)
+
+**Concerto Modeling Language**: Models are defined using the Concerto schema language (see [Concerto GitHub](https://github.com/accordproject/concerto)). Concerto is a lightweight, object-oriented schema language for defining data structures, with support for types, enums, assets, and transactions.
 
 ```javascript
 namespace org.accordproject.nda

@@ -245,7 +245,7 @@ Items explicitly listed as excluded from the document:
 
 ### Model File (model.cto)
 
-```
+```javascript
 namespace org.accordproject.nda
 
 import org.accordproject.cicero.contract.* from https://models.accordproject.org/cicero/contract.cto
@@ -720,7 +720,7 @@ Items explicitly listed as excluded from the document:
 **Reason**: This is a clause library system using URL references, not a template system with variable interpolation. It operates on a completely different paradigm (composition by reference vs. template with variables).
 
 **What it would look like**:
-```
+```text
 Non-Disclosure Agreement
 
 Incorporate https://reference.legal/v1/provisions/nda/parties/2025-01-01

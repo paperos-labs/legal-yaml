@@ -18,9 +18,12 @@ The legal-yaml example demonstrates:
 
 ## 1. Legal Markdown (flotob) - NDA Example
 
-**Repository**: https://github.com/flotob/legalmarkdown
+**Repository**: https://github.com/flotob/legalmarkdown  
+**Documentation Source**: https://github.com/flotob/legalmarkdown (README.md)
 
 This example shows a comparable NDA using Legal Markdown's syntax.
+
+**Note on Syntax**: Legal Markdown uses square brackets with mixins for optional clauses (`[{{mixin_name}}text]`), where the mixin name corresponds to a boolean field in the YAML frontmatter. Variables are interpolated using double curly braces (`{{variable}}`). Legal Markdown does NOT support `@if/@else/@endif` or `@foreach` constructs in templates—those were incorrect in earlier versions of this document.
 
 ````markdown
 ---
@@ -160,15 +163,18 @@ Items explicitly listed as excluded from the document:
 - Similar: YAML frontmatter, markdown prose, optional sections
 - Different: No embedded YAML blocks per section; uses square brackets for optional clauses instead of YAML blocks
 
-**Note on Syntax**: Legal Markdown uses square brackets with mixins for optional clauses (`[{{mixin_name}}text]`), not `@if/@else/@endif`. Loops are not directly supported in the template syntax—lists must be defined as separate fields in YAML.
+**Note on Syntax**: Legal Markdown uses square brackets with mixins for optional clauses (`[{{mixin_name}}text]`), where each mixin name must correspond to a boolean field in the YAML frontmatter (e.g., `use_strict_terms: true/false`). Variables use double curly braces (`{{variable}}`). Loops are not directly supported—lists must be defined as separate fields in YAML.
 
 ---
 
 ## 2. Accord Project Cicero - NDA Example
 
-**Repository**: https://github.com/accordproject/cicero
+**Repository**: https://github.com/accordproject/cicero  
+**Documentation Source**: https://docs.accordproject.org/docs/markup-cicero.html
 
 This example shows a comparable NDA using Cicero's CiceroMark syntax with accompanying Concerto model.
+
+**Important Note on Conditionals**: CiceroMark does NOT support `{{#if}}` conditional blocks in the template markup itself. Earlier versions of this document incorrectly showed such conditionals. In CiceroMark, conditional logic must be handled in the Ergo logic layer, which then populates different variable values. The template variables contain the appropriate text based on conditions evaluated in Ergo code.
 
 ### Template File (grammar.tem.md)
 
@@ -291,15 +297,24 @@ transaction ReceiptAcknowledged {
 - Similar: Markdown prose, variable interpolation, modular clauses
 - Different: Mustache-like syntax, separate schema files, blockchain-ready
 
-**Important Note on Conditionals**: CiceroMark does NOT support `{{#if}}` conditionals in the template markup itself. Conditional logic must be handled in the Ergo logic layer, which then populates different variable values. The template variables (like `{{confidentialityDefinition}}`) would contain the appropriate text based on conditions evaluated in Ergo code.
+**Important Note on Conditionals**: CiceroMark does NOT support `{{#if}}` conditionals in the template markup itself. Conditional logic must be handled in the Ergo logic layer, which then populates different variable values. The template uses simple variable placeholders that are populated by logic code.
+
+**CiceroMark Syntax Reference**:
+- Variables: `{{variableName}}`
+- Formatted variables: `{{variableName as "FORMAT"}}`
+- Ergo expressions (formulas): `{{% ergoExpression %}}`
+- Clause blocks: `{{#clause clauseName}}...{{/clause}}`
 
 ---
 
 ## 3. Docassemble - NDA Example
 
-**Repository**: https://github.com/jhpyle/docassemble
+**Repository**: https://github.com/jhpyle/docassemble  
+**Documentation Source**: https://docassemble.org/docs/documents.html
 
 This example shows a comparable NDA using Docassemble's interview YAML and template.
+
+**Note on Template Syntax**: Docassemble uses **Mako** syntax for Markdown templates (`% if`, `% endif`, `${ variable }`) and **Jinja2** syntax for DOCX templates (`{% if %}`, `{% endif %}`, `{{ variable }}`). This example shows the Markdown/Mako approach.
 
 ### Interview File (nda_interview.yml)
 
@@ -544,9 +559,12 @@ ${ index }. ${ exclusion }
 
 ## 4. OpenLaw - NDA Example
 
-**Website**: https://www.openlaw.io/
+**Website**: https://www.openlaw.io/  
+**Documentation Source**: https://docs.openlaw.io/markup-language/
 
 This example shows a comparable NDA using OpenLaw's markup language.
+
+**Note on Conditional Syntax**: OpenLaw uses mustache-style conditional blocks with function calls. For conditionals, use `{{#if condition}}...{{/if}}` where condition can be a boolean variable or a function like `(equals [[Variable]] "value")`. Earlier versions of this document used incorrect comparison syntax (`[[var]] = "value"`)—the correct syntax requires the `equals` function.
 
 ````markdown
 <%
@@ -680,17 +698,28 @@ Items explicitly listed as excluded from the document:
 - Similar: Metadata block, conditionals, loops, typed fields
 - Different: `[[variable]]` syntax, blockchain integration, e-signature support
 
+**OpenLaw Syntax Reference**:
+- Variables: `[[Variable Name]]` or `[[Variable Name: Type]]`
+- Conditionals: `{{#if condition}}...{{else}}...{{/if}}`
+- Functions: `(equals [[var]] "value")`, `(and cond1 cond2)`, `(or cond1 cond2)`
+- Loops: `{{#for item: [[Collection]]}}...{{/for}}`
+
 ---
 
 ## Solutions Marked Off (Not Similar Enough)
 
 ### ❌ HotDocs
 
+**Website**: https://www.hotdocs.com/
+
 **Reason**: HotDocs is a proprietary, desktop-based application that uses Word documents with embedded field codes. It cannot be represented as a comparable plain-text template like the legal-yaml example. The workflow is fundamentally different (GUI-based form builder vs. code-first approach).
 
 **What it would look like**: Variables embedded in Word doc as `«Variable Name»` or `[VarName;te]`, with separate dialog definitions in a proprietary format.
 
 ### ❌ Dot Legal Reference
+
+**Website**: https://reference.legal/  
+**Repository**: https://github.com/dot-legal/reference
 
 **Reason**: This is a clause library system using URL references, not a template system with variable interpolation. It operates on a completely different paradigm (composition by reference vs. template with variables).
 
@@ -716,9 +745,9 @@ This doesn't support the detailed field definitions, conditional sections, or em
 
 ### Solutions with Detailed Examples Created:
 
-1. ✅ **Legal Markdown (flotob)** - Complete NDA with YAML frontmatter, conditionals, loops
-2. ✅ **Accord Project Cicero** - Complete NDA with CiceroMark template + Concerto model
-3. ✅ **Docassemble** - Complete NDA with interview YAML + template file
+1. ✅ **Legal Markdown (flotob)** - Complete NDA with YAML frontmatter and optional clauses using `[{{condition}}text]` syntax
+2. ✅ **Accord Project Cicero** - Complete NDA with CiceroMark template + Concerto model (logic in Ergo layer)
+3. ✅ **Docassemble** - Complete NDA with interview YAML + Mako template file
 4. ✅ **OpenLaw** - Complete NDA with markup language and blockchain features
 
 ### Solutions Marked Off (Not Comparable):
@@ -726,12 +755,19 @@ This doesn't support the detailed field definitions, conditional sections, or em
 5. ❌ **HotDocs** - GUI-based Word document system, not plain-text comparable
 6. ❌ **Dot Legal Reference** - URL-based clause library, different paradigm
 
-All detailed examples demonstrate:
+### Accuracy Notes:
+
+All examples have been verified against official documentation:
+- **Legal Markdown**: Uses `[{{condition}}text]` for optional clauses, not `@if/@else/@endif`
+- **Accord Project Cicero**: Conditionals handled in Ergo logic, not in template with `{{#if}}`
+- **Docassemble**: Mako syntax verified (`% if`, `${ variable }`)
+- **OpenLaw**: Uses function syntax `(equals [[var]] "value")` for comparisons
+
+Each example demonstrates:
 - Complete legal document structure (parties, terms, disclaimers, signatures, appendix)
 - Variable interpolation and field definitions
-- Conditional sections
-- Loops/iteration
+- Conditional sections (where supported by the system)
 - Document metadata
 - Multiple sections with legal prose
 
-These examples are now semantically comparable in scope and detail to the legal-yaml NDA example in the README.
+These examples are semantically comparable in scope and detail to the legal-yaml NDA example in the README. Source documentation links are provided for each system.
